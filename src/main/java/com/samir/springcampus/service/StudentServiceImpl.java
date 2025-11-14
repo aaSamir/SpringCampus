@@ -3,6 +3,11 @@ package com.samir.springcampus.service;
 import com.samir.springcampus.entity.Student;
 import com.samir.springcampus.exception.StudentNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
+
 import org.springframework.stereotype.Service;
 import com.samir.springcampus.repository.StudentRepository;
 
@@ -21,8 +26,10 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public List<Student> fetchAllStudent() {
-        return studentRepository.findAll();
+    public Page<Student> fetchAllStudent(int page_no, int page_size, String sort_by, String sort_dir) {
+        Sort sort = sort_dir.equalsIgnoreCase("asc")?Sort.by(sort_by).ascending():Sort.by(sort_by).descending();
+        Pageable pageable = PageRequest.of(page_no, page_size, sort);
+        return studentRepository.findAll(pageable);
     }
 
     @Override

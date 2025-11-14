@@ -5,6 +5,10 @@ import com.samir.springcampus.entity.Teacher;
 import com.samir.springcampus.exception.TeacherNotFoundException;
 import com.samir.springcampus.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +26,10 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
-    public List<Teacher> fetchAllTeacher() {
-        return teacherRepository.findAll();
+    public Page<Teacher> fetchAllTeacher(int page_no, int page_size, String sort_by, String sort_dir) {
+        Sort sort = sort_by.equalsIgnoreCase("asc")?Sort.by(sort_by).ascending():Sort.by(sort_by).descending();
+        Pageable pageable = PageRequest.of(page_no, page_size, sort);
+        return teacherRepository.findAll(pageable);
     }
 
     @Override
