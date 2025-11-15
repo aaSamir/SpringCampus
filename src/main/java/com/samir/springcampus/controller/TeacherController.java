@@ -1,6 +1,7 @@
 package com.samir.springcampus.controller;
 
-import com.samir.springcampus.entity.Teacher;
+import com.samir.springcampus.dto.TeacherDTO;
+import com.samir.springcampus.dto.TeacherResponseDTO;
 import com.samir.springcampus.service.TeacherService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/teachers")
@@ -20,26 +19,26 @@ public class TeacherController {
     private TeacherService teacherService;
 
     @PostMapping
-    public ResponseEntity<Teacher> saveTeacher(@Valid @RequestBody Teacher teacher){
-        Teacher t = teacherService.saveTeacher(teacher);
-        return new ResponseEntity<>(t, HttpStatus.CREATED);
+    public ResponseEntity<TeacherResponseDTO> saveTeacher(@Valid @RequestBody TeacherDTO teacherDTO){
+        TeacherResponseDTO teacherResponseDTO = teacherService.saveTeacher(teacherDTO);
+        return new ResponseEntity<>(teacherResponseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Page<Teacher>> fetchAllTeacher(
+    public ResponseEntity<Page<TeacherResponseDTO>> fetchAllTeacher(
             @RequestParam(defaultValue = "0")int page_no,
             @RequestParam(defaultValue = "10")int page_size,
             @RequestParam(defaultValue = "name")String sort_by,
             @RequestParam(defaultValue = "asc")String sort_dir
     ){
-        Page<Teacher> t = teacherService.fetchAllTeacher(page_no, page_size, sort_by, sort_dir);
-        return ResponseEntity.ok(t);
+        Page<TeacherResponseDTO> teacherResponseDTOS = teacherService.fetchAllTeacher(page_no, page_size, sort_by, sort_dir);
+        return ResponseEntity.ok(teacherResponseDTOS);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Teacher> fetchTeacherById(@PathVariable("id") Long id){
-        Teacher t = teacherService.fetchTeacherById(id);
-        return ResponseEntity.ok(t);
+    public ResponseEntity<TeacherResponseDTO> fetchTeacherById(@PathVariable("id") Long id){
+        TeacherResponseDTO teacherResponseDTO = teacherService.fetchTeacherById(id);
+        return ResponseEntity.ok(teacherResponseDTO);
     }
 
     @DeleteMapping("{id}")
@@ -49,8 +48,8 @@ public class TeacherController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Teacher> updateTeacher(@PathVariable("id") Long id, @Valid @RequestBody Teacher teacher){
-        Teacher t = teacherService.updateTeacher(id, teacher);
-        return ResponseEntity.ok(t);
+    public ResponseEntity<TeacherResponseDTO> updateTeacher(@PathVariable("id") Long id, @Valid @RequestBody TeacherDTO teacherDTO){
+        TeacherResponseDTO teacherResponseDTO = teacherService.updateTeacher(id, teacherDTO);
+        return ResponseEntity.ok(teacherResponseDTO);
     }
 }

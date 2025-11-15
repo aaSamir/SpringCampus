@@ -1,20 +1,17 @@
 package com.samir.springcampus.service;
-import com.samir.springcampus.entity.Teacher;
+import com.samir.springcampus.dto.TeacherDTO;
+import com.samir.springcampus.dto.TeacherResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 
-
-import java.util.List;
-import java.util.Optional;
-
 public interface TeacherService {
-    public Teacher saveTeacher(@Valid Teacher teacher);
+    TeacherResponseDTO saveTeacher(@Valid TeacherDTO teacherDTO);
 
-    public Page<Teacher> fetchAllTeacher(int page_no, int page_size, String sort_by, String sort_name);
+    Page<TeacherResponseDTO> fetchAllTeacher(int page_no, int page_size, String sort_by, String sort_name);
 
-    public Teacher fetchTeacherById(Long id);
+    TeacherResponseDTO fetchTeacherById(Long id);
 
-    public void deleteTeacherById(Long id);
+    void deleteTeacherById(Long id);
 
-    public Teacher updateTeacher(Long id, @Valid Teacher teacher);
+    TeacherResponseDTO updateTeacher(Long id, @Valid TeacherDTO teacherDTO);
 }

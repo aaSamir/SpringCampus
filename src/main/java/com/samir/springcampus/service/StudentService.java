@@ -1,26 +1,21 @@
 package com.samir.springcampus.service;
 
-import com.samir.springcampus.entity.Student;
+import com.samir.springcampus.dto.StudentDTO;
+import com.samir.springcampus.dto.StudentResponseDTO;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.PageRequest;
 
-
-import java.util.List;
-import java.util.Optional;
 
 public interface StudentService {
 
-    public Student saveStudent(Student student);
+    StudentResponseDTO saveStudent(StudentDTO studentDTO);
 
-    public Page<Student> fetchAllStudent(int page_no, int page_size, String sort_by, String sort_dir);
+    Page<StudentResponseDTO> fetchAllStudent(int page_no, int page_size, String sort_by, String sort_dir);
 
-    public Student fetchStudentById(Long id);
+    StudentResponseDTO fetchStudentById(Long id);
 
-    public void deleteStudentById(Long id);
+    void deleteStudentById(Long id);
 
-    public Student updateStudent(Long id, Student student);
+    StudentResponseDTO updateStudent(Long id, StudentDTO studentDTO);
 
-    public Optional<Student> fetchStudentByName(String name);
+    StudentResponseDTO fetchStudentByName(String name);
 }
