@@ -3,6 +3,10 @@ package com.samir.springcampus.controller;
 import com.samir.springcampus.dto.TeacherDTO;
 import com.samir.springcampus.dto.TeacherResponseDTO;
 import com.samir.springcampus.service.TeacherService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,17 +17,24 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/teachers")
+@Tag(name = "Teacher Controller", description = "Endpoints for managing teacher endpoints")
 public class TeacherController {
 
     @Autowired
     private TeacherService teacherService;
 
+    @Operation(summary = "Save new Teacher", description = "Creates a new teacher using TeacherDTO")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Teacher successfully created"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body")
+    })
     @PostMapping
     public ResponseEntity<TeacherResponseDTO> saveTeacher(@Valid @RequestBody TeacherDTO teacherDTO){
         TeacherResponseDTO teacherResponseDTO = teacherService.saveTeacher(teacherDTO);
         return new ResponseEntity<>(teacherResponseDTO, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Get all teachers", description = "Pagination+Sorting supported")
     @GetMapping
     public ResponseEntity<Page<TeacherResponseDTO>> fetchAllTeacher(
             @RequestParam(defaultValue = "0")int page_no,
@@ -35,19 +46,35 @@ public class TeacherController {
         return ResponseEntity.ok(teacherResponseDTOS);
     }
 
+    @Operation(summary = "Get teacher by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Teacher found"),
+            @ApiResponse(responseCode = "404", description = "Teacher not found")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<TeacherResponseDTO> fetchTeacherById(@PathVariable("id") Long id){
         TeacherResponseDTO teacherResponseDTO = teacherService.fetchTeacherById(id);
         return ResponseEntity.ok(teacherResponseDTO);
     }
 
-    @DeleteMapping("{id}")
+    @Operation(summary = "Delete teacher by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Teacher deleted"),
+            @ApiResponse(responseCode = "404", description = "Teacher not found")
+    })
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTeacherById(@PathVariable("id") Long id){
         teacherService.deleteTeacherById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Teacher deleted successfully");
     }
 
-    @PutMapping("{id}")
+    @Operation(summary = "Update teacher by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Teacher updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body"),
+            @ApiResponse(responseCode = "404", description = "Teacher not found")
+    })
+    @PutMapping("/{id}")
     public ResponseEntity<TeacherResponseDTO> updateTeacher(@PathVariable("id") Long id, @Valid @RequestBody TeacherDTO teacherDTO){
         TeacherResponseDTO teacherResponseDTO = teacherService.updateTeacher(id, teacherDTO);
         return ResponseEntity.ok(teacherResponseDTO);
